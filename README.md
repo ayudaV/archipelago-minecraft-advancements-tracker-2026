@@ -10,6 +10,8 @@ A static Minecraft-style tracker for Archipelago Minecraft advancements (Java 26
 - `advancements.csv` - advancement records
 - `vercel.json` - Vercel static hosting configuration
 
+The tracker organizes advances by six gameplay phases and by individual Overworld, Nether, Ocean, End, and structure areas. Advancements are editable in `advancements.csv` through their `phase` and `loc` columns.
+
 ## Local preview
 
 ```powershell

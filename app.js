@@ -37,71 +37,131 @@
       phases: [
         {
           id: 'phase0',
-          label: 'Fase 0: Zero Gates (Início)',
+          label: 'Fase 0: Sem Gates',
           icon: 'Invicon_Wooden_Pickaxe.png',
-          desc: 'Advancements possíveis apenas com ferramentas de madeira, saques de vilas/estruturas e exploração, sem depender de nenhuma receita bloqueada.'
+          desc: 'Advancements sem receitas bloqueadas e fáceis de obter por exploração, combate simples ou itens encontrados em loot.'
         },
         {
           id: 'phase1',
-          label: 'Fase 1: Gates Básicos & Combate',
-          icon: 'Invicon_Shield.png',
-          desc: 'Liberados com receitas únicas iniciais: Shield, Bed, Campfire, Archery, Spyglass, Brush, Lead, Tools/Weapons/Armor 1-2 e Resource Crafting 1.'
+          label: 'Fase 1: Exploração & Loot',
+          icon: 'Invicon_Compass.png',
+          desc: 'Advancements que dependem de explorar estruturas, encontrar itens em loot ou receber gates básicos de exploração.'
         },
         {
           id: 'phase2',
-          label: 'Fase 2: Bucket, Nether & Blocos',
-          icon: 'Invicon_Lava_Bucket.png',
-          desc: 'Liberados por Bucket, Flint and Steel, Fishing Rod, Saddle e Resource Crafting 2 (Blocos compactados, Glowstone e Anvil).'
+          label: 'Fase 2: Um Gate Fácil',
+          icon: 'Invicon_Iron_Pickaxe.png',
+          desc: 'Advancements com apenas um gate necessário e execução relativamente direta.'
         },
         {
           id: 'phase3',
-          label: 'Fase 3: Diamante, Alquimia & End Prep',
-          icon: 'Invicon_Brewing_Stand.png',
-          desc: 'Liberados por Progressive Tools 3 (Diamante/Netherite), Brewing (Blaze Powder), Bottles e Enchanting — prepara todo o caminho até o portal do End.'
+          label: 'Fase 3: Um Gate Demorado',
+          icon: 'Invicon_Diamond_Pickaxe.png',
+          desc: 'Advancements com um gate, mas que exigem preparação, viagem ou várias etapas.'
         },
         {
           id: 'phase4',
-          label: 'Fase 4: Pós-Game (114 Advs + 5 Shards)',
+          label: 'Fase 4: Equipamento Máximo',
+          icon: 'Invicon_Netherite_Pickaxe.png',
+          desc: 'Advancements que exigem ferramentas, armas, armaduras ou recursos no nível máximo.'
+        },
+        {
+          id: 'phase5',
+          label: 'Fase 5: Pós-Game',
           icon: 'Invicon_Dragon_Egg.png',
-          desc: 'Exige atingir a meta de advancements + 5 Dragon Egg Shards para invocar o Ender Dragon, explorar End Cities, reviver o dragão e derrotar o Wither/Beaconator.'
+          desc: 'Conteúdo pós-Dragon, Ender Dragon, Shards da meta, Wither e Beacon/Beaconator.'
         }
       ],
       locations: [
         {
           id: 'overworld_surface',
-          label: 'Overworld & Vilas',
+          label: 'Overworld',
           icon: 'Invicon_Grass_Block.png',
-          desc: 'Superfície do Overworld, Vilas, Outposts, Mansões, Prados (Meadows), Montanhas e fazendas.'
+          desc: 'Superfície geral do Overworld, biomas, fazendas e progressão livre.'
         },
         {
-          id: 'caves_deepdark',
-          label: 'Cavernas & Deep Dark',
+          id: 'villages',
+          label: 'Vilas & Mansões',
+          icon: 'Invicon_Emerald.png',
+          desc: 'Vilas, trocas, raids, Pillagers, Evokers, Outposts e Mansões.'
+        },
+        {
+          id: 'mountains',
+          label: 'Montanhas & Prados',
+          icon: 'Invicon_Goat_Horn.png',
+          desc: 'Montanhas, Meadows, cabras, Snowy Slopes e neve fofa.'
+        },
+        {
+          id: 'caves',
+          label: 'Cavernas',
+          icon: 'Invicon_Stone_Pickaxe.png',
+          desc: 'Cavernas comuns, Lush Caves e exploração subterrânea.'
+        },
+        {
+          id: 'deep_dark',
+          label: 'Deep Dark',
           icon: 'Invicon_Sculk_Catalyst.png',
-          desc: 'Subsolo profundo, Lush Caves, Geodes, Stronghold e Ancient Cities (Sculk / Warden).'
+          desc: 'Ancient Cities, Sculk Sensors, Catalysts e Warden.'
         },
         {
-          id: 'trials_pale',
-          label: 'Trial Chambers & Pale Garden',
+          id: 'stronghold',
+          label: 'Stronghold',
+          icon: 'Invicon_End_Portal_Frame.png',
+          desc: 'Fortalezas, olhos de Ender e portal do End.'
+        },
+        {
+          id: 'trial_chambers',
+          label: 'Trial Chambers',
           icon: 'Invicon_Trial_Key.png',
-          desc: 'Câmaras de Julgamento (Breeze, Vaults, Ominous Trials, Mace, Crafter) e Jardim Pálido (Creaking).'
+          desc: 'Breeze, Vaults, Ominous Trials, Mace, Crafter e armadilhas.'
+        },
+        {
+          id: 'pale_garden',
+          label: 'Pale Garden',
+          icon: 'Invicon_Creaking_Heart.png',
+          desc: 'Creaking, Pale Oak e Creaking Heart.'
+        },
+        {
+          id: 'ocean',
+          label: 'Oceanos',
+          icon: 'Invicon_Heart_of_the_Sea.png',
+          desc: 'Oceanos, pesca, Afogados, Axolotls e estruturas oceânicas.'
         },
         {
           id: 'ocean_ruins',
-          label: 'Oceanos & Ruínas',
-          icon: 'Invicon_Heart_of_the_Sea.png',
-          desc: 'Monumentos Oceânicos (Elder Guardian), Warm Ocean Ruins (Sniffer Eggs), Navios Naufragados e pesca.'
+          label: 'Ruínas Oceânicas',
+          icon: 'Invicon_Suspicious_Sand.png',
+          desc: 'Ocean Ruins, Warm Ocean Ruins, Sniffers e arqueologia.'
         },
         {
           id: 'nether',
-          label: 'Dimensão do Nether',
+          label: 'Nether',
           icon: 'Invicon_Netherrack.png',
-          desc: 'Fortalezas do Nether (Blazes, Wither Skeletons), Bastion Remnants, Striders e os 5 biomas do Nether.'
+          desc: 'Biomas do Nether, Striders, Ghasts, Piglins e progressão geral.'
         },
         {
-          id: 'the_end',
-          label: 'Dimensão do End',
+          id: 'nether_fortress',
+          label: 'Fortalezas do Nether',
+          icon: 'Invicon_Nether_Bricks.png',
+          desc: 'Fortalezas, Blazes, Wither Skeletons e itens necessários ao preparo do End.'
+        },
+        {
+          id: 'bastions',
+          label: 'Bastions',
+          icon: 'Invicon_Polished_Blackstone_Bricks.png',
+          desc: 'Bastion Remnants, Piglins, baús raros e saque de Nether.'
+        },
+        {
+          id: 'end_main',
+          label: 'End Principal',
           icon: 'Invicon_End_Portal_Frame.png',
-          desc: 'Ilha Principal (Ender Dragon, Dragon Egg) e Ilhas Externas (End Cities, End Ships, Elytra, Shulkers).'
+          desc: 'Ilha principal, Ender Dragon, Dragon Egg e End Gateway.'
+        },
+        {
+          id: 'end_cities',
+          label: 'End Cities',
+          icon: 'Invicon_Purpur_Block.png',
+          desc: 'Ilhas externas, End Ships, Elytra, Shulkers e Levitation.'
         }
       ],
       vanilla: [
