@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Archipelago Minecraft Advancements Tracker (26.2 / v2.2.1)</title>
+  <meta name="description" content="Rastreador de progresso de advancements para Archipelago Minecraft Java 26.2." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="./app.js" defer></script>
+</head>
+<body class="p-2 sm:p-4">
+  <div class="max-w-7xl mx-auto mc-window p-3 sm:p-4">
+    <!-- BARRA DE PROGRESSO COMPACTA (SEM HEADER REDUNDANTE PARA GOOGLE SITES) -->
+    <div class="mc-inset-box p-3 mb-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-1.5">
+        <div class="flex flex-wrap items-center gap-3 text-lg">
+          <span class="text-gray-300 mc-shadow">Progresso Meta Dragon:</span>
+          <span id="counter-text" class="font-mc-title text-xs sm:text-sm text-[#80ff20]">
+            0 / 114
+          </span>
+        </div>
+        <div class="flex flex-wrap items-center gap-3 text-base text-gray-400">
+          <span>Ativos no YAML: <strong id="active-pool-count" class="text-white">124</strong></span>
+          <span>Restantes p/ Meta: <strong id="remaining-goal-count" class="text-[#ffaa00]">114</strong></span>
+          <span>Total Geral: <strong class="text-gray-200">126</strong></span>
+          <span id="cache-status-badge" class="text-sm text-[#80ff20] border border-[#3b6e18] bg-[#162909] px-1.5 py-0.2">
+            Cache Salvo
+          </span>
+        </div>
+      </div>
+      <div class="mc-xp-bar-bg">
+        <div id="xp-bar-fill" class="mc-xp-bar-fill" style="width: 0%;"></div>
+      </div>
+    </div>
+
+    <!-- BARRA DE CONTROLES: MODO DE AGRUPAMENTO, FILTROS, BUSCA E BACKUP -->
+    <section class="flex flex-col xl:flex-row xl:items-center justify-between gap-3 bg-[#1a1a1a] p-3 border-2 border-black">
+      <!-- Seletor de Organização -->
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="text-gray-400 mr-1 mc-shadow">Agrupar por:</span>
+        <button id="mode-phases" class="mc-btn active px-3 py-1.5 text-lg flex items-center gap-2" onclick="setGroupMode('phases')">
+          <img src="https://minecraft.wiki/images/Invicon_Blaze_Powder.png" class="w-5 h-5" alt="" onerror="handleIconError(this, 'P', '#ff9900')" />
+          Fases (Gates)
+        </button>
+        <button id="mode-locations" class="mc-btn px-3 py-1.5 text-lg flex items-center gap-2" onclick="setGroupMode('locations')">
+          <img src="https://minecraft.wiki/images/Invicon_Compass.png" class="w-5 h-5" alt="" onerror="handleIconError(this, 'L', '#55ffff')" />
+          Locais / Estruturas
+        </button>
+        <button id="mode-vanilla" class="mc-btn px-3 py-1.5 text-lg flex items-center gap-2" onclick="setGroupMode('vanilla')">
+          <img src="https://minecraft.wiki/images/Invicon_Knowledge_Book.png" class="w-5 h-5" alt="" onerror="handleIconError(this, 'V', '#80ff20')" />
+          Abas Vanilla
+        </button>
+      </div>
+
+      <!-- Filtros Rápidos + Busca + Backup Compacto -->
+      <div class="flex flex-wrap items-center gap-2">
+        <select id="status-filter" class="mc-input cursor-pointer" onchange="onFilterChange()">
+          <option value="all">Mostrar: Todos</option>
+          <option value="unlocked_only">Apenas Liberados pelos Gates</option>
+          <option value="pending">Pendentes (Borda Branca)</option>
+          <option value="done">Concluídos (Borda Laranja)</option>
+          <option value="hard">Apenas Hard</option>
+          <option value="postgame">Apenas Pós-Game</option>
+        </select>
+
+        <button id="toggle-hard" class="mc-btn active px-3 py-1.5 text-lg" onclick="toggleHideHard()" title="Alterna inclusão dos Hard Advancements no pool">
+          Hard: ON
+        </button>
+
+        <button id="toggle-unreasonable" class="mc-btn active px-3 py-1.5 text-lg" onclick="toggleHideUnreasonable()" title="No seu YAML include_unreasonable_advancements está false">
+          Ocultar Unreasonable: ON
+        </button>
+
+        <input
+          type="text"
+          id="search-input"
+          class="mc-input w-full sm:w-48"
+          placeholder="Buscar advancement..."
+          oninput="onSearchInput()"
+        />
+
+        <button class="mc-btn px-2.5 py-1.5 text-base" onclick="exportProgress()" title="Exportar JSON de backup">Exportar JSON</button>
+        <button class="mc-btn px-2.5 py-1.5 text-base" onclick="importProgressPrompt()" title="Importar JSON de backup">Importar JSON</button>
+      </div>
+    </section>
+
+    <!-- PAINEL INTERATIVO DE GATES OFICIAIS DO ARCHIPELAGO (26.2 / NEOFORGEAP) -->
+    <details class="mt-3 bg-[#181818] border-2 border-black" open>
+      <summary class="px-3 py-2 cursor-pointer flex flex-wrap items-center justify-between gap-2 text-lg text-[#ffaa00] hover:bg-[#222222]">
+        <span class="mc-shadow font-bold">Gates & Receitas Bloqueadas no Archipelago (Clique no que você já recebeu no Multiworld)</span>
+        <span class="text-sm text-gray-400">
+          Desbloqueados: <strong id="gates-unlocked-count" class="text-[#55ff55]">0 / 24</strong>
+          <button type="button" class="mc-btn px-2 py-0.5 text-sm ml-2" onclick="event.preventDefault(); toggleAllGates(true)">Marcar Todos</button>
+          <button type="button" class="mc-btn px-2 py-0.5 text-sm" onclick="event.preventDefault(); toggleAllGates(false)">Limpar Gates</button>
+        </span>
+      </summary>
+      <div id="gates-grid" class="p-3 pt-1 border-t border-[#2b2b2b] flex flex-wrap gap-1.5"></div>
+    </details>
+
+    <!-- LEGENDA VISUAL & RESET -->
+    <div class="mt-3 px-2 flex flex-wrap items-center justify-between gap-3 text-base text-gray-300">
+      <div class="flex flex-wrap items-center gap-4">
+        <span class="flex items-center gap-1.5">
+          <span class="inline-block w-4 h-4 border-2 border-white bg-[#2b2b2b]"></span>
+          Pendente
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="inline-block w-4 h-4 border-2 border-[#ff9900] bg-[#b45309]"></span>
+          Concluído (Done)
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="inline-block w-3 h-3 bg-[#ff5555] border border-black"></span>
+          Hard
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="inline-block w-3 h-3 bg-[#55ffff] border border-black"></span>
+          Pós-Game
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="inline-block w-3 h-3 bg-[#aa00aa] border border-black"></span>
+          Unreasonable
+        </span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button class="mc-btn px-2.5 py-1 text-base text-[#ff7777]" onclick="resetAllConfirm()">Resetar Tudo</button>
+      </div>
+    </div>
+
+    <!-- ABAS DE NAVEGAÇÃO DO GRUPO ATUAL -->
+    <nav id="group-tabs" class="mt-4 flex flex-wrap gap-1 px-1"></nav>
+
+    <!-- ÁREA PRINCIPAL DA GRADE DE ADVANCEMENTS -->
+    <main class="mc-inset-box p-4 sm:p-6 min-h-[420px]">
+      <div id="section-header" class="mb-5 pb-3 border-b-2 border-[#2a2a2a] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div>
+          <h2 id="current-group-title" class="font-mc-title text-sm sm:text-base text-[#ffaa00]"></h2>
+          <p id="current-group-desc" class="text-gray-300 text-lg mt-1"></p>
+        </div>
+        <div id="current-group-stats" class="text-lg text-[#80ff20] font-bold mc-shadow"></div>
+      </div>
+
+      <!-- Grade de Slots Estilo Menu 'L' (Apenas ícones dentro das molduras) -->
+      <div id="advancements-container" class="space-y-6"></div>
+    </main>
+
+    <!-- PAINEL INFERIOR FIXO DE DETALHE SELECIONADO / TOQUE MOBILE -->
+    <footer id="mobile-detail-bar" class="mt-4 mc-inset-box p-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div id="inspector-slot" class="adv-slot frame-task shrink-0" style="width:48px;height:48px;cursor:default;">
+          <img id="inspector-icon" src="https://minecraft.wiki/images/Invicon_Knowledge_Book.png" class="adv-icon" alt="" onerror="handleIconError(this, '?', '#ffaa00')" />
+        </div>
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span id="inspector-title" class="font-mc-title text-xs sm:text-sm text-[#ffff55]">Passe o mouse ou clique em um advancement</span>
+            <span id="inspector-badges" class="flex gap-1.5"></span>
+          </div>
+          <p id="inspector-desc" class="text-gray-300 text-lg leading-tight mt-0.5">
+            Clique em qualquer ícone acima para alternar entre Pendente (borda branca) e Concluído (borda laranja).
+          </p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- MODAL CUSTOMIZADO (SUBSTITUI ALERT/CONFIRM) -->
+  <div id="mc-modal" class="fixed inset-0 bg-black/80 hidden items-center justify-center z-50 p-4">
+    <div class="mc-window max-w-md w-full p-5">
+      <h3 id="modal-title" class="font-mc-title text-sm text-[#ffaa00] mb-3">Aviso</h3>
+      <p id="modal-body" class="text-xl text-gray-200 mb-4"></p>
+      <textarea id="modal-textarea" class="mc-input w-full h-28 hidden mb-4 text-base"></textarea>
+      <div class="flex justify-end gap-2">
+        <button id="modal-cancel" class="mc-btn px-4 py-1.5" onclick="closeModal()">Cancelar</button>
+        <button id="modal-confirm" class="mc-btn active px-4 py-1.5">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLTIP FLUTUANTE ESTILO MINECRAFT -->
+  <div id="mc-tooltip">
+    <div class="flex items-center justify-between gap-2 mb-1">
+      <span id="tt-title" class="font-mc-title text-xs leading-snug text-[#55ff55]"></span>
+      <span id="tt-status" class="text-sm px-1.5 py-0.2 border"></span>
+    </div>
+    <div id="tt-tags" class="flex flex-wrap gap-1.5 mb-2 text-sm"></div>
+    <p id="tt-desc" class="text-[#aaaaaa] text-lg leading-snug mb-2"></p>
+    <div id="tt-gates-box" class="mb-2 text-base"></div>
+    <div class="border-t border-[#3b0099] pt-1.5 text-base text-[#e0d0ff]">
+      <span class="text-[#aa77ff] font-bold">Requisito / Dica:</span>
+      <span id="tt-req"></span>
+    </div>
+    <div class="mt-1.5 text-sm text-gray-400 flex justify-between">
+      <span id="tt-phase"></span>
+      <span id="tt-loc"></span>
+    </div>
+  </div>
+
+<script>
+  window.createPixelFallback = function(label, colorHex) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 16;
+    canvas.height = 16;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = colorHex || '#4b5563';
+    ctx.fillRect(0, 0, 16, 16);
+    ctx.fillStyle = 'rgba(255,255,255,0.22)';
+    ctx.fillRect(0, 0, 16, 2);
+    ctx.fillRect(0, 0, 2, 16);
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.fillRect(0, 14, 16, 2);
+    ctx.fillRect(14, 0, 2, 16);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 9px monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const initial = (label || '?').replace(/[^A-Za-z0-9]/g, '').charAt(0).toUpperCase() || '?';
+    ctx.fillText(initial, 8, 9);
+    return canvas.toDataURL();
+  };
+  window.handleIconError = function(imgEl, label, colorHex) {
+    if (!imgEl || imgEl.dataset.fallbackApplied === 'true') return;
+    imgEl.dataset.fallbackApplied = 'true';
+    imgEl.src = window.createPixelFallback(label, colorHex);
+  };
+</script>
+</body>
+</html>

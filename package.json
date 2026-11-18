@@ -1,0 +1,8 @@
+{
+  "name": "archipelago-minecraft-advancements-tracker",
+  "private": true,
+  "scripts": {
+    "dev": "npx --yes serve . -l 3000",
+    "start": "npx --yes serve . -l 3000"
+  }
+}
