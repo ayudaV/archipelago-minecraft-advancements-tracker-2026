@@ -37,39 +37,39 @@
       phases: [
         {
           id: 'phase0',
-          label: 'Fase 0: Sem Gates',
+          label: 'Fase 0: Vilas & Navios',
           icon: 'Invicon_Wooden_Pickaxe.png',
-          desc: 'Advancements sem receitas bloqueadas e fáceis de obter por exploração, combate simples ou itens encontrados em loot.'
+          desc: 'Advancements iniciais que dependem de explorar vilas, barcos e estruturas básicas.'
         },
         {
           id: 'phase1',
-          label: 'Fase 1: Exploração & Loot',
-          icon: 'Invicon_Compass.png',
-          desc: 'Advancements que dependem de explorar estruturas, encontrar itens em loot ou receber gates básicos de exploração.'
+          label: 'Fase 1: Nether, Pillager & Trial Chambers',
+          icon: 'Invicon_Red_Nether_Bricks.png',
+          desc: 'Advancements que exigem acesso ao Nether, Trial Chambers e Pillager Outposts buscando os loots disponíveis.'
         },
         {
           id: 'phase2',
-          label: 'Fase 2: Um Gate Fácil',
-          icon: 'Invicon_Iron_Pickaxe.png',
-          desc: 'Advancements com apenas um gate necessário e execução relativamente direta.'
+          label: 'Fase 2: 1 Gate, Exploração & Loot',
+          icon: 'Invicon_Compass.gif',
+          desc: 'Advancements com apenas um gate necessário e que dependem de exploração'
         },
         {
           id: 'phase3',
-          label: 'Fase 3: Um Gate Demorado',
+          label: 'Fase 3: 1-2 Gates Demorados',
           icon: 'Invicon_Diamond_Pickaxe.png',
-          desc: 'Advancements com um gate, mas que exigem preparação, viagem ou várias etapas.'
+          desc: 'Advancements com 1 ou 2 gates necessários, mas que exigem tempo e dedicação para serem concluídos.'
         },
         {
           id: 'phase4',
-          label: 'Fase 4: Equipamento Máximo',
+          label: 'Fase 4: Chato pra krl!',
           icon: 'Invicon_Netherite_Pickaxe.png',
-          desc: 'Advancements que exigem ferramentas, armas, armaduras ou recursos no nível máximo.'
+          desc: 'Advancements que exigem muito tempo, paciência e dedicação para serem concluídos.'
         },
         {
           id: 'phase5',
           label: 'Fase 5: Pós-Game',
           icon: 'Invicon_Dragon_Egg.png',
-          desc: 'Conteúdo pós-Dragon, Ender Dragon, Shards da meta, Wither e Beacon/Beaconator.'
+          desc: 'Conteúdo pós-Dragon, Ender Dragon, Shards da meta, Wither e Beacon/Beaconator. Podem ser feitos antes do Dragon, mas exigem fly machine.'
         }
       ],
       locations: [
@@ -112,7 +112,7 @@
         {
           id: 'trial_chambers',
           label: 'Trial Chambers',
-          icon: 'Invicon_Trial_Key.png',
+          icon: 'ItemSprite_trial-key.png',
           desc: 'Breeze, Vaults, Ominous Trials, Mace, Crafter e armadilhas.'
         },
         {
