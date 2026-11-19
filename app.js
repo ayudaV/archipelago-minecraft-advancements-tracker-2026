@@ -213,8 +213,13 @@
       ADVANCEMENTS = rows.map((values) => {
         const item = {};
         headers.forEach((header, index) => { item[header] = values[index] ?? ''; });
-        item.gates = item.gates ? item.gates.split('|') : [];
-        item.postgame = item.postgame === 'true';
+        item.gates = item.gates
+          ? item.gates
+              .split(/[|,]/)
+              .map((gate) => gate.trim())
+              .filter(Boolean)
+          : [];
+        item.postgame = ['true', '1', 'yes'].includes(String(item.postgame).trim().toLowerCase());
         return item;
       });
     }

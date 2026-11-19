@@ -12,6 +12,8 @@ A static Minecraft-style tracker for Archipelago Minecraft advancements (Java 26
 
 The tracker organizes advances by six gameplay phases and by individual Overworld, Nether, Ocean, End, and structure areas. Advancements are editable in `advancements.csv` through their `phase` and `loc` columns.
 
+The CSV loader accepts gate lists separated by commas or pipes and `postgame` values such as `TRUE`/`FALSE`, `true`/`false`, or `1`/`0`. This keeps the tracker compatible with Google Sheets exports.
+
 ## Local preview
 
 ```powershell
